@@ -7,50 +7,43 @@ geteip:
     pop edx
     lea edx, [edx - 5]
 
-; -------------------------
-; BUSCAR MODULO
-; buscamos en _PEB
-mov eax, fs:[0x30]              ; EAX = _PEB
-mov esi, [eax + 0x0C]           ; ESI = _PEB_LDR_DATA
-mov esi, [esi + 0x0C]           ; ESI = InLoadOrderModuleList
-mov ebx, esi                    ; guardamos el head de la lista
+mov eax, 0x760A0000     ; BaseDll kernel32.dll
+mov ebx, [eax + 0x3c]   ; ebx = Offset to NtHeader
+lea ebx, [eax + ebx]    ; ebx = NtHeader
+mov ebx, [ebx + 0x78]   ; ebx = Offset to _IMAGE_EXPORT_DIRECTORY
+lea ebx, [eax + ebx]    ; ebx = _IMAGE_EXPORT_DIRECTORY
 
 
-lea edi, [EDX + MODULES]        ; EAX = puntero donde guardaremos direcciones
-next_module:
-    ; puntero a UNICODE_STRING.Buffer del módulo
-    mov eax, [esi + 0x2c + 0x04]      
-    ; guardar en nuestro array
-    mov [edi], eax
-    add edi, 4                  ; avanzar al siguiente slot
- 
-    ; siguiente nodo en la lista
-    mov esi, [esi]              ; ESI = Flink = siguiente nodo           
-    cmp esi, ebx
-    jne next_module
-
-; -------------------------
-; BUSCAR FUNCION
-
-; -------------------------
-; COMPARE STRING
-; Entrada:
-;   ESI -> puntero al primer string
-;   EDI -> puntero al segundo string
-; Salida:
-;   ZF = 1 si son iguales, ZF = 0 si son diferentes
-strcmp:
+mov esi, 0x0                    ; esi = contador
+mov edx, [ebx + 0x18]            ; edx = numero de funciones
+mov edi, [ebx + 0x20]            ; edi = Offset to array of names
+lea edi, [eax + edi]            ; edi = direccion del primer Offset al primer name
+fun_loop:
+    mov ecx, [edi]
+    lea ecx, [eax + ecx]        ; ebx = string name funcion
+    ; comparacion
+    add edi, 4
+    inc esi
+    cmp edx, esi
+    jne fun_loop
 
 ; -------------------------
 ; almacenamiento
 MODULES:
     m1:
-        dd 0x00000001
-    m2:
-        dd 0x00000002
-    m3:
-        dd 0x00000003
-    m4:
-        dd 0x00000004
-    m5:
-        dd 0x00000005
+        dd 0x00000001 
+
+; -------------------------
+; EJEMPLO
+
+; 75860000 + F8 + 78 = 75860170 ; DIRECCION DEL OFFSET TO _IMAGE_EXPORT_DIRECTORY
+
+; 95b80 ; OFFSET TO _IMAGE_EXPORT_DIRECTORY
+
+; 75860000 + 95b80 = 758F5B80 ; DIRECCION DE _IMAGE_EXPORT_DIRECTORY
+
+; 758F5B80 + c = 758F5B8C ; DIRECCION DEL OFFSET TO Name
+
+; 99c9e ; OFFSET TO Name
+
+; 75860000 + 99c9e = 758F9C9E ; DIRECCION DEL Name

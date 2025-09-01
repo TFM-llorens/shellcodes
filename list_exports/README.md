@@ -1,12 +1,14 @@
 ``` scss
 BaseDll (dirección base del módulo)
- └── Secciones (IMAGE_SECTION_HEADER[])
-       └── Primera sección
-             └── [últimos 4 bytes] -> Offset to NtHeaders
+ └── 0x3C [últimos 4 bytes Primera sección] -> Offset to NtHeaders
+       └── 
+             └── 
  └── Saltar a NtHeaders
-       └── Offset 0x78 desde el inicio de NT Headers
-             └── IMAGE_EXPORT_DIRECTORY
-                   ├── [0x0C] -> NumberOfNames
+       └── Offset 0x78 desde el inicio de NT Headers -> Offset to IMAGE_EXPORT_DIRECTORY 
+             └── 
+			 
+ └── Saltar a IMAGE_EXPORT_DIRECTORY
+       └── [0x0C] -> NumberOfNames
 ```
 
 
