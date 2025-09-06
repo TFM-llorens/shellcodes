@@ -72,41 +72,20 @@ typedef struct _LIST_ENTRY {
 ## _LDR_DATA_TABLE_ENTRY
 ``` c
 typedef struct _LDR_DATA_TABLE_ENTRY {
-    /* 0x00 */ LIST_ENTRY InLoadOrderLinks;          // Siguiente/previo módulo en la lista "LoadOrder"
-    /* 0x10 */ LIST_ENTRY InMemoryOrderLinks;        // Lista de módulos en orden de memoria
-    /* 0x20 */ LIST_ENTRY InInitializationOrderLinks;// Lista de módulos en orden de inicialización
+    /* 0x000 */ LIST_ENTRY InLoadOrderLinks;          // Siguiente/previo módulo en la lista "LoadOrder"
+    /* 0x008 */ LIST_ENTRY InMemoryOrderLinks;        // Lista de módulos en orden de memoria
+    /* 0x010 */ LIST_ENTRY InInitializationOrderLinks;// Lista de módulos en orden de inicialización
 
-    /* 0x30 */ PVOID DllBase;                        // Dirección base donde está cargada la DLL
-    /* 0x34 */ PVOID EntryPoint;                     // Dirección del entrypoint (DllMain / EntryPoint)
-    /* 0x38 */ ULONG SizeOfImage;                    // Tamaño del módulo en memoria
+    /* 0x018 */ PVOID DllBase;                        // Dirección base donde está cargada la DLL
+    /* 0x01c */ PVOID EntryPoint;                     // Dirección del entrypoint (DllMain / EntryPoint)
+    /* 0x020 */ ULONG SizeOfImage;                    // Tamaño del módulo en memoria
 
-    /* 0x3C */ UNICODE_STRING FullDllName;           // Nombre completo (con ruta), ej: C:\Windows\System32\kernel32.dll
-    /* 0x44 */ UNICODE_STRING BaseDllName;           // Nombre corto/base, ej: kernel32.dll
+    /* 0x024 */ UNICODE_STRING FullDllName;           // Nombre completo (con ruta), ej: C:\Windows\System32\kernel32.dll
+    /* 0x02c */ UNICODE_STRING BaseDllName;           // Nombre corto/base, ej: kernel32.dll
 
-    /* 0x4C */ ULONG Flags;                          // Flags internos de carga
-    /* 0x50 */ WORD LoadCount;                       // Nº de veces cargado (referencias)
-    /* 0x52 */ WORD TlsIndex;                        // Índice TLS si aplica
-
-    union {
-        /* 0x54 */ LIST_ENTRY HashLinks;             // Usado en tablas hash
-        struct {
-            /* 0x54 */ PVOID SectionPointer;
-            /* 0x58 */ ULONG CheckSum;
-        };
-    };
-
-    union {
-        /* 0x5C */ ULONG TimeDateStamp;              // Timestamp de compilación (PE Header)
-        /* 0x5C */ PVOID LoadedImports;              // (en algunos builds)
-    };
-
-    /* 0x60 */ struct _ACTIVATION_CONTEXT *EntryPointActivationContext;
-    /* 0x64 */ PVOID PatchInformation;
-
-    /* 0x68 */ LIST_ENTRY ForwarderLinks;
-    /* 0x78 */ LIST_ENTRY ServiceTagLinks;
-    /* 0x88 */ LIST_ENTRY StaticLinks;
-
+    /* 0x034 */ ULONG Flags;                          // Flags internos de carga
+    ...
+    
 } LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;
 ```
 

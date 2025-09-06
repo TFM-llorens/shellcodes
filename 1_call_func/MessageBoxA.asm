@@ -16,6 +16,12 @@ push ebx
 push ecx
 push 0
 
+; int MessageBoxA(
+;   [in, optional] HWND   hWnd,
+;   [in, optional] LPCSTR lpText,
+;   [in, optional] LPCSTR lpCaption,
+;   [in]           UINT   uType
+; );
 mov eax, 0x764EAD20
 call eax
 
@@ -26,3 +32,4 @@ SCSTRINGS:
         db 'text',0
     aTitle:
         db 'title',0
+

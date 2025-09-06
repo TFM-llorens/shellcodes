@@ -22,7 +22,7 @@ def create_hash(export_name: str) -> int:
     result = 0
     print(f"== Creando hash para '{export_name}' ==")
     
-    for i, ch in enumerate(export_name):
+    for i, ch in enumerate(export_name.lower()):
         before = result
         result = rol(result, 7, 32)
         after_rol = result

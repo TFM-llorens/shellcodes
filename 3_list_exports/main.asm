@@ -15,8 +15,8 @@ lea ebx, [eax + ebx]    ; ebx = _IMAGE_EXPORT_DIRECTORY
 
 
 mov esi, 0x0                    ; esi = contador
-mov edx, [ebx + 0x18]            ; edx = numero de funciones
-mov edi, [ebx + 0x20]            ; edi = Offset to array of names
+mov edx, [ebx + 0x18]           ; edx = numero de funciones
+mov edi, [ebx + 0x20]           ; edi = Offset to array of names
 lea edi, [eax + edi]            ; edi = direccion del primer Offset al primer name
 fun_loop:
     mov ecx, [edi]
